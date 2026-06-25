@@ -289,7 +289,7 @@ body.printing .page:last-child { page-break-after: auto; }
 <div class="page active" id="p1">
   <div class="kpi-row">
     <div class="kpi"><div class="kpi-lbl">Ventas Acum. 2026</div><div class="kpi-val" id="k-acum">—</div><div class="kpi-sub" id="k-acum-sub">—</div></div>
-    <div class="kpi"><div class="kpi-lbl">Mismo Periodo 2025</div><div class="kpi-val" id="k-2025">—</div><div class="kpi-sub" id="k-yoy">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Mismo Período Ant.</div><div class="kpi-val" id="k-2025">—</div><div class="kpi-sub" id="k-yoy">—</div></div>
     <div class="kpi am"><div class="kpi-lbl">Meta Proyectada (Joany)</div><div class="kpi-val" id="k-meta">—</div><div class="kpi-sub" id="k-meta-pct">—</div></div>
     <div class="kpi cy"><div class="kpi-lbl">Inversión Pauta</div><div class="kpi-val" id="k-pauta">—</div><div class="kpi-sub">Total YTD 2026</div></div>
     <div class="kpi cy"><div class="kpi-lbl">ROAS Promedio</div><div class="kpi-val" id="k-roas">—</div><div class="kpi-sub">Ventas / Inversión</div></div>
@@ -344,7 +344,7 @@ body.printing .page:last-child { page-break-after: auto; }
 
 <!-- PAGE 2: VENTAS -->
 <div class="page" id="p2">
-  <div class="slabel">Histórico anual de ventas 2022–2026 (COP M)</div>
+  <div class="slabel" id="sl-hist">Histórico anual de ventas (COP M)</div>
   <div class="card">
     <div class="leg">
       <span class="li"><span class="ld" style="background:#aaa"></span>2022</span>
@@ -356,7 +356,7 @@ body.printing .page:last-child { page-break-after: auto; }
     <div class="ch" style="height:200px"><canvas id="cHist"></canvas></div>
   </div>
 
-  <div class="slabel">Rangos de transacción 2026 — análisis por tamaño de venta</div>
+  <div class="slabel" id="sl-rangos">Rangos de transacción — análisis por tamaño de venta</div>
   <div class="card">
     <div class="rg" id="rg-display"></div>
     <div class="ch" style="height:150px"><canvas id="cRangos"></canvas></div>
@@ -693,18 +693,27 @@ function fetchCSV(url) {
 function parseDate(s) {
   if (!s) return null;
   const str = String(s).trim();
-  if (!str || str === '') return null;
-  // Excel serial number (e.g. 44837 = days since 1900-01-01)
+  if (!str) return null;
+
+  // ── 1. Excel serial number (integer like 44837) ──
+  //    Use LOCAL date arithmetic to avoid UTC timezone shift
   const n = parseFloat(str);
-  if (!isNaN(n) && n > 40000 && n < 60000) {
-    // Excel epoch: Jan 0, 1900 = JS epoch - 70 years - 1 day (leap year bug)
-    const ms = (n - 25569) * 86400000;
-    const d = new Date(ms);
-    return isNaN(d.getTime()) ? null : d;
+  if (!isNaN(n) && n > 40000 && n < 60000 && !/[^\d.]/.test(str)) {
+    // Excel epoch is Dec 30, 1899. Add n days.
+    const base = new Date(1899, 11, 30);  // Dec 30, 1899 local time
+    base.setDate(base.getDate() + Math.round(n));
+    return isNaN(base.getTime()) ? null : base;
   }
-  // dd/mm/yyyy or ISO
-  const m = str.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-  if (m) return new Date(parseInt(m[3]), parseInt(m[2])-1, parseInt(m[1]));
+
+  // ── 2. dd/mm/yyyy or d/m/yyyy (Colombian CSV format) ──
+  const dmy = str.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+  if (dmy) return new Date(parseInt(dmy[3]), parseInt(dmy[2])-1, parseInt(dmy[1]));
+
+  // ── 3. yyyy-mm-dd (ISO) ──
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return new Date(parseInt(iso[1]), parseInt(iso[2])-1, parseInt(iso[3]));
+
+  // ── 4. Fallback ──
   const d = new Date(str);
   return isNaN(d.getTime()) ? null : d;
 }
@@ -721,8 +730,7 @@ function fmtM2(v) { return (v/1e6).toFixed(1); }
 // ═══════════════════════════════════════════════════════════════════════════════
 function processData(ventasRaw, pautaRaw, proyRaw) {
   // ── VENTAS: skip header row ─────────────────────────────────────────────
-  const allRows = ventasRaw.slice(1).filter(r => r[C.fechaVenta] && r[C.fechaVenta].trim() !== '');
-  const rows = allRows;  // filter applied after date parsing below
+
 
   // Parse each row
   const sales = rows.map(r => {
@@ -750,10 +758,19 @@ function processData(ventasRaw, pautaRaw, proyRaw) {
     if (FILTER_HASTA && r.fecha > FILTER_HASTA) return false;
     return true;
   });
+  // Debug: log year distribution
+  const yearDist = {};
+  sales.forEach(r => { if(r.year) yearDist[r.year]=(yearDist[r.year]||0)+1; });
+  console.log('📊 Ventas por año:', yearDist);
+  console.log('📊 Total filas parseadas:', sales.length, '| Sin fecha:', sales.filter(r=>!r.fecha).length);
+  const allYears = [...new Set(sales.map(r=>r.year).filter(Boolean))].sort();
+  const latestYear = allYears[allYears.length-1] || 2026;
+  console.log('📊 Año más reciente detectado:', latestYear);
+  
   const s2026 = (FILTER_DESDE || FILTER_HASTA)
-    ? filteredSales.filter(r => r.year >= 2020)   // filtered view: all years in range
-    : sales.filter(r => r.year === 2026);
-  const s2025 = sales.filter(r => r.year === 2025);
+    ? filteredSales
+    : sales.filter(r => r.year === latestYear);  // use latest year in data
+  const s2025 = sales.filter(r => r.year === latestYear - 1);
   const s2024 = sales.filter(r => r.year === 2024);
   const s2023 = sales.filter(r => r.year === 2023);
   const s2022 = sales.filter(r => r.year === 2022);
@@ -800,7 +817,7 @@ function processData(ventasRaw, pautaRaw, proyRaw) {
   const MNAMES = ['CO110 Ventas','CO118 Goodwe','CO119 Cat.SHP','Solardays','CO113 Preventa','Remarketing','CO115/117 EV'];
   pRows.forEach(r => {
     const d = parseDate(r[0]);
-    if (!d || d.getFullYear() !== 2026) return;
+    if (!d || d.getFullYear() !== latestYear) return;  // use same year as ventas
     const m = d.getMonth()+1;
     const gVals = GCOLS.map(i => parseNum(r[i]));
     const mVals = MCOLS.map(i => parseNum(r[i]));
@@ -981,16 +998,17 @@ function processData(ventasRaw, pautaRaw, proyRaw) {
   const cvRanges = buildRangeTables(s2026, r=>r.diasCotizVenta);
 
   // ── HISTORICAL ─────────────────────────────────────────────────────────
-  const hist = [
-    [2022, s2022.reduce((a,b)=>a+b.subtotal,0)],
-    [2023, s2023.reduce((a,b)=>a+b.subtotal,0)],
-    [2024, s2024.reduce((a,b)=>a+b.subtotal,0)],
-    [2025, s2025.reduce((a,b)=>a+b.subtotal,0)],
-    [2026, s2026.reduce((a,b)=>a+b.subtotal,0)],
-  ].map(([y,v])=>({year:y, v:parseFloat(fmtM2(v))}));
+  // Build historical dynamically from all years present
+  const histYears = [...new Set(sales.map(r=>r.year).filter(Boolean))].sort();
+  const salesByYear = {};
+  sales.forEach(r => { if(r.year) salesByYear[r.year]=(salesByYear[r.year]||0)+r.subtotal; });
+  // Always include latest year (s2026) even if not in sales (it has its own filter)
+  if (!salesByYear[latestYear]) salesByYear[latestYear] = s2026.reduce((a,b)=>a+b.subtotal,0);
+  const hist = [...new Set([...histYears, latestYear])].sort()
+    .map(y => ({year:y, v:parseFloat(fmtM2(salesByYear[y]||0))}));
 
   return {
-    corte, activeMeses, mLabels, nMeses,
+    corte, activeMeses, mLabels, nMeses, latestYear,
     monthly2026, monthly2025, metaJoanyArr,
     gTotals, mTotals, pubTotals, roas,
     gBreakdown, mBreakdown, GNAMES, MNAMES,
@@ -1048,8 +1066,9 @@ function renderAll() {
 
   // ── KPIs P1 ─────────────────────────────────────────────────────────────
   document.getElementById('k-acum').textContent = '$'+acum+'M';
-  document.getElementById('k-acum-sub').textContent = 'Ene — ' + d.corte;
+  const firstMes = d.activeMeses.length ? ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.activeMeses[0]] : 'Ene'; document.getElementById('k-acum-sub').textContent = firstMes + ' — ' + d.corte;
   document.getElementById('k-2025').textContent = '$'+acum25+'M';
+  document.getElementById('k-2025').previousElementSibling.textContent = 'Mismo Período '+(d.latestYear-1);
   document.getElementById('k-yoy').innerHTML = '<span class="kpi-pos">↑ '+yoy+'% vs 2025</span>';
   document.getElementById('k-meta').textContent = '$'+metaAcum+'M';
   const joanyPct = metaAcum>0?Math.round(acum/metaAcum*100):0;
@@ -1071,7 +1090,7 @@ function renderAll() {
 
   // ── ANALYSIS BOX ────────────────────────────────────────────────────────
   document.getElementById('analysis-headline').innerHTML =
-    'El mejor arranque de año en la historia de Emergente, con un crecimiento de <span class="analysis-accent">+'+yoy+'%</span> versus 2025.';
+    'El mejor arranque de año en la historia de Emergente, con un crecimiento de <span class="analysis-accent">+'+yoy+'%</span> vs '+(latestYear-1)+'.';
   document.getElementById('analysis-lead').innerHTML =
     'Entre enero y '+d.corte+', Emergente facturó <strong>$'+acum+'M</strong>, superando ampliamente los $'+acum25+'M del mismo período en 2025. El equipo activo (Cristian, Marcela y Andrea) sostiene un ritmo que ya supera los benchmarks históricos.';
   document.getElementById('analysis-sections').innerHTML = `
@@ -1128,9 +1147,10 @@ function renderAll() {
 
   // ── HIST ─────────────────────────────────────────────────────────────────
   if(activeCharts.cH){activeCharts.cH.destroy();}
+  const hColors=['#aaa','#8ee0e5',CV_C,A,N,'#7F77DD','#f5a623'];
   activeCharts.cH = new Chart(document.getElementById('cHist'),{type:'bar',data:{
-    labels:d.hist.map(h=>h.year+(h.year===2026?'*':'')),
-    datasets:[{data:d.hist.map(h=>h.v),backgroundColor:['#aaa','#8ee0e5',CV_C,A,N],borderRadius:5}]},
+    labels:d.hist.map(h=>h.year+(h.year===d.latestYear?'*':'')),
+    datasets:[{data:d.hist.map(h=>h.v),backgroundColor:d.hist.map((_,i)=>hColors[i]||N),borderRadius:5}]},
     options:bo({plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw+'M'}}}})});
 
   // ── RANGOS ───────────────────────────────────────────────────────────────
