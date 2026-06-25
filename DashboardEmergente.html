@@ -127,33 +127,84 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
 .ftr img{height:24px;display:block}
 .ftr-t{font-size:10.5px;color:rgba(255,255,255,.4)}
 
-/* COMMENTS */
+
+/* DATE FILTER BAR */
+.filter-bar{background:#fff;border-bottom:1px solid var(--BD);padding:8px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filter-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--T3)}
+.filter-input{font-family:var(--F);font-size:11.5px;padding:5px 10px;border:1px solid var(--BD);border-radius:6px;color:var(--DK);background:#fafafa;cursor:pointer;outline:none}
+.filter-input:focus{border-color:var(--N)}
+.btn-filter{font-family:var(--F);font-size:11px;font-weight:600;padding:5px 14px;border-radius:16px;cursor:pointer;border:1px solid var(--N);background:var(--N);color:#fff;transition:all .15s}
+.btn-filter:hover{opacity:.85}
+.btn-filter.secondary{background:transparent;color:var(--T3);border-color:var(--BD)}
+.btn-filter.secondary:hover{border-color:var(--DK);color:var(--DK)}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:4px}
+.fchip{font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;cursor:pointer;border:1px solid var(--BD);background:transparent;color:var(--T3);font-family:var(--F);transition:all .15s}
+.fchip:hover{border-color:var(--N);color:var(--N)}
+.fchip.active{background:var(--N);border-color:var(--N);color:#fff}
+.filter-sep{width:1px;height:20px;background:var(--BD);margin:0 4px}
+.filter-result{font-size:10.5px;color:var(--T3);margin-left:auto}
+.filter-result strong{color:var(--DK)}
+
+/* LOGIN MODAL */
+#login-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9998;align-items:center;justify-content:center}
+#login-modal.open{display:flex}
+.login-box{background:#fff;border-radius:14px;padding:32px 36px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
+.login-box h3{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--DK)}
+.login-box p{font-size:12px;color:var(--T3);margin-bottom:20px;line-height:1.5}
+.login-pin{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+.pin-digit{width:44px;height:52px;border:2px solid var(--BD);border-radius:8px;text-align:center;font-size:22px;font-weight:700;font-family:var(--F);color:var(--DK);outline:none;transition:border-color .15s}
+.pin-digit:focus{border-color:var(--N)}
+.pin-digit.filled{border-color:var(--C)}
+.login-error{font-size:11px;color:var(--N);margin-bottom:12px;min-height:16px}
+.btn-login{width:100%;font-family:var(--F);font-size:13px;font-weight:600;padding:10px;border-radius:8px;cursor:pointer;border:none;background:var(--DK);color:#fff;transition:all .15s;margin-bottom:8px}
+.btn-login:hover{background:#333}
+.btn-login-cancel{width:100%;font-family:var(--F);font-size:12px;font-weight:500;padding:8px;border-radius:8px;cursor:pointer;border:1px solid var(--BD);background:transparent;color:var(--T3);font-family:var(--F)}
+.btn-login-cancel:hover{border-color:var(--DK);color:var(--DK)}
+.session-badge{font-size:9.5px;background:#e6f7ef;color:#1a6b44;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:8px}
+
+/* COMMENTS — locked vs unlocked */
 .comment-block{margin-top:20px;border:1.5px solid var(--BD);border-radius:10px;background:#fff;overflow:hidden}
 .comment-header{background:var(--DK);padding:8px 16px;display:flex;align-items:center;justify-content:space-between}
 .comment-header span{color:rgba(255,255,255,.7);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.comment-area{width:100%;min-height:80px;border:none;resize:vertical;font-family:var(--F);font-size:12px;line-height:1.65;color:var(--DK);padding:12px 16px;background:#fff;outline:none}
-.comment-footer{padding:6px 12px;background:#fafafa;border-top:1px solid var(--BD);display:flex;align-items:center;gap:8px;justify-content:flex-end}
-.btn-save-comment{font-family:var(--F);font-size:10.5px;font-weight:600;padding:5px 14px;border-radius:16px;cursor:pointer;border:1px solid var(--N);background:var(--N);color:#fff;transition:all .15s}
+.comment-area{width:100%;min-height:80px;border:none;resize:vertical;font-family:var(--F);font-size:12px;line-height:1.65;color:var(--DK);padding:12px 16px;background:#fff;outline:none;transition:background .2s}
+.comment-area:disabled{background:#fafafa;color:#888;cursor:not-allowed;resize:none}
+.comment-area.unlocked{background:#fffdf0;cursor:text}
+.comment-footer{padding:6px 12px;background:#fafafa;border-top:1px solid var(--BD);display:flex;align-items:center;gap:8px}
+.comment-lock-msg{font-size:10px;color:#bbb;flex:1;display:flex;align-items:center;gap:5px}
+.btn-unlock{font-family:var(--F);font-size:10px;font-weight:600;padding:4px 12px;border-radius:12px;cursor:pointer;border:1px solid var(--BD);background:#fff;color:var(--T3);transition:all .15s}
+.btn-unlock:hover{border-color:var(--N);color:var(--N)}
+.btn-unlock.active{border-color:#1a6b44;color:#1a6b44;background:#e6f7ef}
+.btn-save-comment{font-family:var(--F);font-size:10.5px;font-weight:600;padding:5px 14px;border-radius:16px;cursor:pointer;border:1px solid var(--N);background:var(--N);color:#fff;transition:all .15s;display:none}
+.btn-save-comment.visible{display:inline-block}
 .btn-save-comment:hover{opacity:.85}
 .btn-save-comment.saved{background:#1a6b44;border-color:#1a6b44}
 .comment-ts{font-size:9.5px;color:#bbb}
+
 
 /* PDF EXPORT */
 .btn-pdf{background:transparent;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;cursor:pointer;font-family:var(--F);display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap}
 .btn-pdf:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5);color:#fff}
 
 @media print {
-  #loader, .btn-refresh, .btn-pdf, .nav, .comment-footer, .btn-save-comment { display:none!important; }
+  #loader, .btn-refresh, .btn-pdf, .nav, .comment-footer, .btn-unlock,
+  .filter-bar, #login-modal, .btn-save-comment { display:none!important; }
   .hdr { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .hdr-badge { display:none; }
+  .hdr-badge, .hdr-right { display:none!important; }
   body { background:#fff; font-size:11px; }
-  .page { display:block!important; page-break-after:always; }
+  .page { display:block!important; page-break-after:always; padding:12px 16px; }
   .page:last-child { page-break-after:auto; }
-  .comment-area { border:1px solid #eee; min-height:40px; }
+  .comment-area { border:1px solid #eee; min-height:50px; background:#fafafa!important;
+                  color:#333!important; font-style:italic; resize:none!important; }
   .comment-block { border:1px solid #ddd; page-break-inside:avoid; }
   .card { page-break-inside:avoid; }
   .ch { height:180px!important; }
+  .kpi-row { grid-template-columns: repeat(4,1fr)!important; }
+  .g2 { grid-template-columns: 1fr!important; }
 }
+
+/* Show all pages when printing (via JS class, avoids inline style specificity bug) */
+body.printing .page { display:block !important; page-break-after: always; }
+body.printing .page:last-child { page-break-after: auto; }
 </style>
 </head>
 <body>
@@ -167,6 +218,24 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
 </div>
 
 <!-- APP -->
+<!-- LOGIN MODAL -->
+<div id="login-modal">
+  <div class="login-box">
+    <div style="font-size:28px;margin-bottom:8px">🔒</div>
+    <h3>Acceso a comentarios</h3>
+    <p>Ingresa el PIN para editar los comentarios del reporte.</p>
+    <div class="login-pin" id="pin-inputs">
+      <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="pin0">
+      <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="pin1">
+      <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="pin2">
+      <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="pin3">
+    </div>
+    <div class="login-error" id="pin-error"></div>
+    <button class="btn-login" onclick="checkPin()">Ingresar</button>
+    <button class="btn-login-cancel" onclick="closeLoginModal()">Cancelar</button>
+  </div>
+</div>
+
 <div id="app">
 <div class="accent"></div>
 <div class="hdr">
@@ -196,6 +265,25 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   <button class="nav-btn" onclick="showPage('p7',this)">&#128337; Semanal</button>
   <button class="nav-btn" onclick="showPage('p8',this)">&#128161; Insights</button>
 </nav>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filter-bar">
+  <span class="filter-label">Período:</span>
+  <input type="date" class="filter-input" id="f-desde" title="Desde">
+  <span style="font-size:11px;color:#bbb">→</span>
+  <input type="date" class="filter-input" id="f-hasta" title="Hasta">
+  <button class="btn-filter" onclick="applyFilter()">Aplicar</button>
+  <button class="btn-filter secondary" onclick="clearFilter()">Limpiar</button>
+  <div class="filter-sep"></div>
+  <div class="filter-chips">
+    <button class="fchip" onclick="setQuick('ytd')">YTD 2026</button>
+    <button class="fchip" onclick="setQuick('q1')">Q1</button>
+    <button class="fchip" onclick="setQuick('q2')">Q2</button>
+    <button class="fchip" onclick="setQuick('last30')">Últ. 30d</button>
+    <button class="fchip" onclick="setQuick('last90')">Últ. 90d</button>
+  </div>
+  <span class="filter-result" id="filter-result"></span>
+</div>
 
 <!-- PAGE 1: RESUMEN -->
 <div class="page active" id="p1">
@@ -240,15 +328,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   <div class="card"><table class="tbl" id="tRes"></table></div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp1">
+  <div class="comment-block" id="cb-p1">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Resumen General</span>
-      <span class="comment-ts" id="ts-pp1"></span>
+      <span class="comment-ts" id="ts-p1"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp1" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p1" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp1')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p1">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p1" onclick="requestUnlock('p1')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p1" onclick="saveComment('p1')">Guardar</button>
     </div>
   </div>
 </div>
@@ -329,15 +418,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   </div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp2">
+  <div class="comment-block" id="cb-p2">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Análisis de Ventas</span>
-      <span class="comment-ts" id="ts-pp2"></span>
+      <span class="comment-ts" id="ts-p2"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp2" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p2" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp2')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p2">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p2" onclick="requestUnlock('p2')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p2" onclick="saveComment('p2')">Guardar</button>
     </div>
   </div>
 </div>
@@ -356,15 +446,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   <div class="card"><table class="tbl" id="tVend"></table></div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp3">
+  <div class="comment-block" id="cb-p3">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Equipo Comercial</span>
-      <span class="comment-ts" id="ts-pp3"></span>
+      <span class="comment-ts" id="ts-p3"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp3" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p3" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp3')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p3">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p3" onclick="requestUnlock('p3')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p3" onclick="saveComment('p3')">Guardar</button>
     </div>
   </div>
 </div>
@@ -389,15 +480,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   </div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp4">
+  <div class="comment-block" id="cb-p4">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Canales de Conversión</span>
-      <span class="comment-ts" id="ts-pp4"></span>
+      <span class="comment-ts" id="ts-p4"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp4" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p4" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp4')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p4">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p4" onclick="requestUnlock('p4')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p4" onclick="saveComment('p4')">Guardar</button>
     </div>
   </div>
 </div>
@@ -419,15 +511,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   </div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp5">
+  <div class="comment-block" id="cb-p5">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Categorías de Producto</span>
-      <span class="comment-ts" id="ts-pp5"></span>
+      <span class="comment-ts" id="ts-p5"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp5" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p5" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp5')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p5">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p5" onclick="requestUnlock('p5')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p5" onclick="saveComment('p5')">Guardar</button>
     </div>
   </div>
 </div>
@@ -454,15 +547,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   <div class="card"><table class="tbl" id="tPauta"></table></div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp6">
+  <div class="comment-block" id="cb-p6">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Pauta Digital</span>
-      <span class="comment-ts" id="ts-pp6"></span>
+      <span class="comment-ts" id="ts-p6"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp6" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p6" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp6')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p6">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p6" onclick="requestUnlock('p6')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p6" onclick="saveComment('p6')">Guardar</button>
     </div>
   </div>
 </div>
@@ -475,15 +569,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   <div class="card"><table class="tbl" id="tSem"></table></div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp7">
+  <div class="comment-block" id="cb-p7">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Análisis Semanal</span>
-      <span class="comment-ts" id="ts-pp7"></span>
+      <span class="comment-ts" id="ts-p7"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp7" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p7" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp7')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p7">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p7" onclick="requestUnlock('p7')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p7" onclick="saveComment('p7')">Guardar</button>
     </div>
   </div>
 </div>
@@ -506,15 +601,16 @@ body{font-family:var(--F);background:var(--BG);color:var(--DK);font-size:13px;li
   </table></div>
 
   <!-- COMENTARIO SECCIÓN -->
-  <div class="comment-block" id="cb-pp8">
+  <div class="comment-block" id="cb-p8">
     <div class="comment-header">
       <span>&#128221; Comentario del analista — Insights y Decisiones</span>
-      <span class="comment-ts" id="ts-pp8"></span>
+      <span class="comment-ts" id="ts-p8"></span>
     </div>
-    <textarea class="comment-area" id="ta-pp8" placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
+    <textarea class="comment-area" id="ta-p8" disabled placeholder="Escribe tu análisis, observaciones o recomendaciones para este período..."></textarea>
     <div class="comment-footer">
-      <span style="font-size:10px;color:#bbb">Se guarda automáticamente en este navegador</span>
-      <button class="btn-save-comment" onclick="saveComment('pp8')">Guardar comentario</button>
+      <span class="comment-lock-msg" id="lm-p8">&#128274; Bloqueado — inicia sesión para editar</span>
+      <button class="btn-unlock" id="ul-p8" onclick="requestUnlock('p8')">&#128275; Editar</button>
+      <button class="btn-save-comment" id="sv-p8" onclick="saveComment('p8')">Guardar</button>
     </div>
   </div>
 </div>
@@ -595,8 +691,21 @@ function fetchCSV(url) {
 // PARSE HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
 function parseDate(s) {
-  if (!s || s.trim() === '') return null;
-  const d = new Date(s);
+  if (!s) return null;
+  const str = String(s).trim();
+  if (!str || str === '') return null;
+  // Excel serial number (e.g. 44837 = days since 1900-01-01)
+  const n = parseFloat(str);
+  if (!isNaN(n) && n > 40000 && n < 60000) {
+    // Excel epoch: Jan 0, 1900 = JS epoch - 70 years - 1 day (leap year bug)
+    const ms = (n - 25569) * 86400000;
+    const d = new Date(ms);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  // dd/mm/yyyy or ISO
+  const m = str.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+  if (m) return new Date(parseInt(m[3]), parseInt(m[2])-1, parseInt(m[1]));
+  const d = new Date(str);
   return isNaN(d.getTime()) ? null : d;
 }
 function parseNum(s) {
@@ -612,7 +721,8 @@ function fmtM2(v) { return (v/1e6).toFixed(1); }
 // ═══════════════════════════════════════════════════════════════════════════════
 function processData(ventasRaw, pautaRaw, proyRaw) {
   // ── VENTAS: skip header row ─────────────────────────────────────────────
-  const rows = ventasRaw.slice(1).filter(r => r[C.fechaVenta] && r[C.fechaVenta].trim() !== '');
+  const allRows = ventasRaw.slice(1).filter(r => r[C.fechaVenta] && r[C.fechaVenta].trim() !== '');
+  const rows = allRows;  // filter applied after date parsing below
 
   // Parse each row
   const sales = rows.map(r => {
@@ -633,11 +743,22 @@ function processData(ventasRaw, pautaRaw, proyRaw) {
     };
   }).filter(r => r.fecha && r.year);
 
-  const s2026 = sales.filter(r => r.year === 2026);
+  // Apply date filter
+  const filteredSales = sales.filter(r => {
+    if (!r.fecha) return false;
+    if (FILTER_DESDE && r.fecha < FILTER_DESDE) return false;
+    if (FILTER_HASTA && r.fecha > FILTER_HASTA) return false;
+    return true;
+  });
+  const s2026 = (FILTER_DESDE || FILTER_HASTA)
+    ? filteredSales.filter(r => r.year >= 2020)   // filtered view: all years in range
+    : sales.filter(r => r.year === 2026);
   const s2025 = sales.filter(r => r.year === 2025);
   const s2024 = sales.filter(r => r.year === 2024);
   const s2023 = sales.filter(r => r.year === 2023);
   const s2022 = sales.filter(r => r.year === 2022);
+  // For label: use filtered period or full year
+  const periodLabel = (FILTER_DESDE||FILTER_HASTA) ? 'período filtrado' : '2026';
 
   // Corte date
   const maxDate = s2026.reduce((a,b) => b.fecha > a ? b.fecha : a, new Date(0));
@@ -1227,7 +1348,10 @@ function showPautaTab(type,btn){
 // PAGE NAV
 // ═══════════════════════════════════════════════════════════════════════════════
 function showPage(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.remove('active');
+    p.style.display='';  // clear inline style left by PDF export
+  });
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
@@ -1245,6 +1369,7 @@ async function loadData() {
       fetchCSV(URLS.proy),
     ]);
     setProgress(60, 'Procesando datos...');
+    RAW_VENTAS = ventasRaw; RAW_PAUTA = pautaRaw; RAW_PROY = proyRaw;
     D = processData(ventasRaw, pautaRaw, proyRaw);
     setProgress(85, 'Construyendo dashboard...');
     destroyCharts();
@@ -1273,6 +1398,7 @@ async function refreshData() {
       fetchCSV(URLS.pauta + '&t=' + Date.now()),
       fetchCSV(URLS.proy + '&t=' + Date.now()),
     ]);
+    RAW_VENTAS = ventasRaw; RAW_PAUTA = pautaRaw; RAW_PROY = proyRaw;
     D = processData(ventasRaw, pautaRaw, proyRaw);
     destroyCharts();
     renderAll();
@@ -1287,6 +1413,153 @@ async function refreshData() {
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// DATE FILTER
+// ═══════════════════════════════════════════════════════════════════════════════
+let FILTER_DESDE = null;
+let FILTER_HASTA = null;
+let RAW_VENTAS = null, RAW_PAUTA = null, RAW_PROY = null;
+
+function setQuick(period) {
+  const now = new Date();
+  const y = now.getFullYear();
+  let d, h;
+  if (period === 'ytd')    { d = new Date(y,0,1);      h = now; }
+  else if (period === 'q1'){ d = new Date(y,0,1);      h = new Date(y,2,31); }
+  else if (period === 'q2'){ d = new Date(y,3,1);      h = new Date(y,5,30); }
+  else if (period === 'last30'){ d = new Date(now-30*864e5); h = now; }
+  else if (period === 'last90'){ d = new Date(now-90*864e5); h = now; }
+  document.getElementById('f-desde').value = d.toISOString().slice(0,10);
+  document.getElementById('f-hasta').value = h.toISOString().slice(0,10);
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  event.target.classList.add('active');
+  applyFilter();
+}
+
+function applyFilter() {
+  const dv = document.getElementById('f-desde').value;
+  const hv = document.getElementById('f-hasta').value;
+  FILTER_DESDE = dv ? new Date(dv + 'T00:00:00') : null;
+  FILTER_HASTA = hv ? new Date(hv + 'T23:59:59') : null;
+  const res = document.getElementById('filter-result');
+  if (FILTER_DESDE || FILTER_HASTA) {
+    const fd = FILTER_DESDE ? FILTER_DESDE.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}) : '…';
+    const fh = FILTER_HASTA ? FILTER_HASTA.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}) : 'hoy';
+    res.innerHTML = `Mostrando: <strong>${fd} → ${fh}</strong>`;
+  } else {
+    res.innerHTML = '';
+  }
+  if (RAW_VENTAS) {
+    D = processData(RAW_VENTAS, RAW_PAUTA, RAW_PROY);
+    destroyCharts();
+    renderAll();
+  }
+}
+
+function clearFilter() {
+  FILTER_DESDE = null; FILTER_HASTA = null;
+  document.getElementById('f-desde').value = '';
+  document.getElementById('f-hasta').value = '';
+  document.getElementById('filter-result').innerHTML = '';
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  if (RAW_VENTAS) {
+    D = processData(RAW_VENTAS, RAW_PAUTA, RAW_PROY);
+    destroyCharts();
+    renderAll();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LOGIN / PIN SYSTEM
+// ═══════════════════════════════════════════════════════════════════════════════
+const CORRECT_PIN = '2026';  // ← cambia aquí el PIN
+const SESSION_KEY = 'emergente_session';
+let pendingUnlockId = null;
+
+function isLoggedIn() {
+  try { return sessionStorage.getItem(SESSION_KEY) === 'ok'; } catch(e){ return false; }
+}
+
+function openLoginModal(targetId) {
+  pendingUnlockId = targetId;
+  document.getElementById('pin-error').textContent = '';
+  ['pin0','pin1','pin2','pin3'].forEach(id => { const el=document.getElementById(id); if(el){el.value='';el.classList.remove('filled');} });
+  document.getElementById('login-modal').classList.add('open');
+  setTimeout(() => document.getElementById('pin0').focus(), 100);
+}
+
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+  pendingUnlockId = null;
+}
+
+function checkPin() {
+  const pin = ['pin0','pin1','pin2','pin3'].map(id=>document.getElementById(id).value).join('');
+  if (pin === CORRECT_PIN) {
+    try { sessionStorage.setItem(SESSION_KEY,'ok'); } catch(e){}
+    closeLoginModal();
+    if (pendingUnlockId) unlockComment(pendingUnlockId);
+    updateSessionUI();
+  } else {
+    document.getElementById('pin-error').textContent = 'PIN incorrecto. Intenta de nuevo.';
+    ['pin0','pin1','pin2','pin3'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('pin0').focus();
+  }
+}
+
+function requestUnlock(id) {
+  if (isLoggedIn()) { unlockComment(id); return; }
+  openLoginModal(id);
+}
+
+function unlockComment(id) {
+  const ta = document.getElementById('ta-' + id);
+  const ul = document.getElementById('ul-' + id);
+  const sv = document.getElementById('sv-' + id);
+  const lm = document.getElementById('lm-' + id);
+  if (!ta) return;
+  if (ta.disabled) {
+    ta.disabled = false;
+    ta.classList.add('unlocked');
+    ta.focus();
+    if (ul) { ul.textContent = '🔒 Bloquear'; ul.classList.add('active'); }
+    if (sv) sv.classList.add('visible');
+    if (lm) lm.innerHTML = '<span style="color:#1a6b44;font-weight:600">✏️ Modo edición activo</span>';
+  } else {
+    ta.disabled = true;
+    ta.classList.remove('unlocked');
+    if (ul) { ul.textContent = '🔓 Editar'; ul.classList.remove('active'); }
+    if (sv) sv.classList.remove('visible');
+    if (lm) lm.innerHTML = '🔒 Bloqueado — inicia sesión para editar';
+  }
+}
+
+function updateSessionUI() {
+  const badge = document.getElementById('session-badge');
+  if (badge) badge.style.display = isLoggedIn() ? 'inline' : 'none';
+}
+
+// PIN digit auto-advance
+document.addEventListener('DOMContentLoaded', () => {
+  ['pin0','pin1','pin2','pin3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      el.classList.toggle('filled', el.value !== '');
+      if (el.value && i < 3) document.getElementById('pin'+(i+1)).focus();
+      if (i === 3 && el.value) checkPin();
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !el.value && i > 0) document.getElementById('pin'+(i-1)).focus();
+      if (e.key === 'Enter') checkPin();
+    });
+  });
+  // Close modal on backdrop click
+  document.getElementById('login-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('login-modal')) closeLoginModal();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // COMMENTS SYSTEM
 // ═══════════════════════════════════════════════════════════════════════════════
 const COMMENT_KEY = 'emergente_dash_comments_v1';
@@ -1298,15 +1571,16 @@ function loadComments() {
       const ta = document.getElementById('ta-' + id);
       const ts = document.getElementById('ts-' + id);
       if (ta) ta.value = obj.text || '';
-      if (ts) ts.textContent = obj.ts ? 'Guardado: ' + obj.ts : '';
+      if (ts && obj.ts) ts.textContent = 'Guardado: ' + obj.ts;
     });
   } catch(e) {}
+  updateSessionUI();
 }
 
 function saveComment(id) {
   const ta = document.getElementById('ta-' + id);
   const ts = document.getElementById('ts-' + id);
-  const btn = document.querySelector(`#cb-${id} .btn-save-comment`);
+  const btn = document.getElementById('sv-' + id);
   if (!ta) return;
   try {
     const saved = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
@@ -1314,17 +1588,16 @@ function saveComment(id) {
     saved[id] = { text: ta.value, ts: now };
     localStorage.setItem(COMMENT_KEY, JSON.stringify(saved));
     if (ts) ts.textContent = 'Guardado: ' + now;
-    if (btn) { btn.textContent = '✓ Guardado'; btn.classList.add('saved'); setTimeout(()=>{ btn.textContent='Guardar comentario'; btn.classList.remove('saved'); }, 2000); }
-  } catch(e) { alert('No se pudo guardar. Verifica permisos del navegador.'); }
+    if (btn) { btn.textContent = '✓ Guardado'; btn.classList.add('saved'); setTimeout(()=>{ btn.textContent='Guardar'; btn.classList.remove('saved'); }, 2000); }
+  } catch(e) { alert('No se pudo guardar.'); }
 }
 
-// Auto-save on Ctrl+Enter inside a textarea
 document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+  if (e.key === 'Escape') closeLoginModal();
+  if ((e.ctrlKey||e.metaKey) && e.key === 'Enter') {
     const ta = document.activeElement;
-    if (ta && ta.classList.contains('comment-area')) {
-      const id = ta.id.replace('ta-', '');
-      saveComment(id);
+    if (ta && ta.classList.contains('comment-area') && !ta.disabled) {
+      saveComment(ta.id.replace('ta-',''));
     }
   }
 });
@@ -1333,14 +1606,16 @@ document.addEventListener('keydown', e => {
 // PDF EXPORT
 // ═══════════════════════════════════════════════════════════════════════════════
 function exportarPDF() {
-  // Show all pages temporarily for print
-  const pages = document.querySelectorAll('.page');
-  pages.forEach(p => p.style.display = 'block');
+  // Lock all comments for clean PDF view
+  document.querySelectorAll('.comment-area').forEach(ta => {
+    ta.disabled = true; ta.classList.remove('unlocked');
+  });
+  // Use a body class to show all pages via CSS — never touch inline styles
+  document.body.classList.add('printing');
   window.print();
-  // Restore after print dialog closes
   setTimeout(() => {
-    pages.forEach(p => p.classList.contains('active') ? (p.style.display='block') : (p.style.display='none'));
-  }, 1000);
+    document.body.classList.remove('printing');
+  }, 1500);
 }
 
 // ── START ─────────────────────────────────────────────────────────────────────
